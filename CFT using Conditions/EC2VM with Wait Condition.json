@@ -1,0 +1,39 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Description" : "CFT Template using wait condition",
+
+  "Resources" : {
+    "EC2Instance" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+        "KeyName" : "admin-Default" ,
+        "UserData" : { "Fn::Base64" : {"Ref" : "WaitHandle"}},
+        "Tags": [ { "Key": "Name", "Value": "CFTVMInstanceViaCFT" } ],
+        "ImageId" : "ami-655a0a20"
+      }
+    },
+
+    "WaitHandle" : {
+      "Type" : "AWS::CloudFormation::WaitConditionHandle",
+      "Properties" : { }
+    },
+
+    "WaitCondition" : {
+      "Type" : "AWS::CloudFormation::WaitCondition",
+      "DependsOn" : "EC2Instance",
+      "Properties" : {
+        "Count" : "0",
+        "Handle" : { "Ref" : "WaitHandle" },
+        "Timeout" : "900"
+      }
+    }
+  },
+
+  "Outputs" : {
+    "InstanceId" : {
+      "Description" : "InstanceId of the newly created EC2 instance",
+      "Value" : { "Ref" : "EC2Instance" }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+
+  "Resources": {
+    "ChildStack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "http://cloudformation-templates-us-west-1.s3.amazonaws.com/EC2InstanceSample-1.0.0.template",
+        "Parameters": { "KeyName" : "admin-Default" }
+      }
+    }
+  },
+
+  "Outputs": {
+    "InstanceId" : { "Value" : { "Fn::GetAtt" : [ "ChildStack", "Outputs.InstanceId" ] } }
+  }
+}

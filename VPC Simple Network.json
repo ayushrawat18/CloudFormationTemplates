@@ -1,0 +1,39 @@
+{
+	"AWSTemplateFormatVersion" : "2010-09-09",
+
+	"Description" : "AWS CloudFormation Sample Template VPCSample: Create an Amazon VPC. This example creates an Network under Amazon VPC. **WARNING** This template creates an Amazon EC2 instance. You will be billed for the AWS resources used if you create a stack from this template.",
+
+	"Parameters" : {
+
+		"VpcCidr": {
+			"Description": "VPC CIDR (X.X.0.0/16)",
+			"Type": "String",
+			"Default": "10.0.0.0/16",
+			"AllowedValues" : [ "10.0.0.0/16", "10.0.1.0/16"],
+			"ConstraintDescription" : "must be a either 10.0.0.0/16 or 10.0.1.0/16"
+		}
+	},
+
+	"Mappings" : {},
+
+	"Resources" : {
+		"VPC" : {
+			"Type" : "AWS::EC2::VPC",
+			"Properties" : {
+				"CidrBlock" : { "Ref" : "VpcCidr" },
+				"Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "AWS::StackId"} } ]
+			}
+		}
+	},
+
+	"Outputs" : {
+		"VpcId" : {
+			"Description" : "NetworkID of the newly created VPC resource",
+			"Value" : { "Ref" : "VPC" }
+		},
+		"PrimaryCidrBlock": {
+			"Description" : "CIDR Block of the newly created VPC resource",
+			"Value": { "Fn::GetAtt": [ "VPC", "CidrBlock" ] }
+        }
+	}
+}

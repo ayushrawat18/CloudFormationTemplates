@@ -1,0 +1,43 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Description" : "AWS CloudFormation Sample Template for creating Simple LoadBalancer",
+
+  "Parameters" : {
+    "WebServerPort" : {
+      "Description" : "TCP/IP port of the web server",
+      "Type" : "String",
+      "Default" : "80"
+    }
+  },
+
+  "Mappings" : { },
+
+  "Resources" : {
+    "ElasticLoadBalancer" : {
+      "Type" : "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties" : {
+        "AvailabilityZones" : { "Fn::GetAZs" : "" },
+        "Listeners" : [ {
+          "LoadBalancerPort" : "80",
+          "InstancePort" : { "Ref" : "WebServerPort" },
+          "Protocol" : "HTTP"
+        } ],
+        "HealthCheck" : {
+          "Target" : { "Fn::Join" : [ "", ["HTTP:", { "Ref" : "WebServerPort" }, "/index.html"]]},
+          "HealthyThreshold" : "2",
+          "UnhealthyThreshold" : "10",
+          "Interval" : "30",
+          "Timeout" : "5"
+        }
+      }
+    }
+  },
+
+  "Outputs" : {
+    "URL" : {
+      "Description" : "URL of the sample website",
+      "Value" :  { "Fn::Join" : [ "", [ "http://", { "Fn::GetAtt" : [ "ElasticLoadBalancer", "DNSName" ]}]]}
+    }
+  }
+}

@@ -1,0 +1,11 @@
+var allFields  = g_form.getFieldNames();
+for (var i = 0; i < allFields.length; i++) {
+	var fieldInfo = g_form.getField(allFields[i]);
+	if (fieldInfo.type == 'masked' && fieldInfo.useConfirmation) {
+		if (fieldInfo.displayValue != fieldInfo.confirmPassword)
+			this.showErrorMsg("The following masked fields do not match: ", g_form)
+	}
+}
+
+
+this.showErrorMsg("The following masked fields do not match: ", g_form)

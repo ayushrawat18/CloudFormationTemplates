@@ -1,0 +1,10 @@
+deleteTemplateParam : function(templateParamName, templateVersion) {
+		var gr = new GlideRecord('sn_cmp_cloud_template_version_param');
+		gr.addQuery('template_version', templateVersion);
+		gr.addQuery('name', templateParamName);
+		gr.query();
+		if(gr.next()) {
+			gr.deleteRecord();
+			
+		}
+	},
